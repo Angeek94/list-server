@@ -1,5 +1,7 @@
 var express=require("express")
 var  app=express()
+var cors=require("cors")
+app.use(cors())
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -12,8 +14,8 @@ app.post("/post",function(req,res){
     var completed=req.body.completed;
     var assignedTo=req.body.assignedTo;
     if(assignedTo.toLowerCase()=="caio"||assignedTo.toLowerCase()=="tizio"||assignedTo.toLowerCase()=="sempronio"){
-        list.insertToDo(name,description,completed,assignedTo);
-        res.status(201).json({message:"Nuovo elemento aggiunto"})
+        
+        res.status(201).json(list.insertToDo(name,description,completed,assignedTo))
     }else{
         res.status(401).json({message:"Non puoi aggiungere questo elemento"})
     }
@@ -31,8 +33,10 @@ app.get("/getUsers",function(req,res){
         res.json(list.getUsers());
 })
 app.get("/getToDoByUser",function(req,res){
-   
+	list.resetReadUsers()
     res.status(200).json(list.readListByUser(req.query.user));
+    
+    	
 })
 app.get("/getToDoByStatus",function(req,res){
    

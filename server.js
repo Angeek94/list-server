@@ -8,12 +8,18 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 var list=require("list-exam")
+app.post("/postUsers",function(req,res){
+    var user =req.body.user;
+    list.insertUsers(user)
+    res.status(201).json(list.getUsers());
+   
+})
 app.post("/post",function(req,res){
     var name=req.body.name;
     var description=req.body.description;
     var completed=req.body.completed;
     var assignedTo=req.body.assignedTo;
-    if(assignedTo.toLowerCase()=="caio"||assignedTo.toLowerCase()=="tizio"||assignedTo.toLowerCase()=="sempronio"){
+    if(list.getUsers().indexOf(assignedTo.toLowerCase())>-1){
         
         res.status(201).json(list.insertToDo(name,description,completed,assignedTo))
     }else{
